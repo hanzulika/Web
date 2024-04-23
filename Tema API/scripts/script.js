@@ -1,3 +1,5 @@
+import { HtmlLoader } from "./pageLoader.js";
+
 let loader=new HtmlLoader;
-loader.loadHtml("./html/menu.html","nav");
+loader.loadHtml("../extra/menu.html","navbar");
 
