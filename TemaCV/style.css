@@ -1,0 +1,176 @@
+p{
+    color:rgb(0, 0, 0);
+}
+
+#main-title{
+    font-size:28px;
+}
+
+#main-photo{
+    width: 200px;
+    max-width: 100%;
+    height:auto;
+    margin-bottom: 20px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    position:relative;
+    background-color: #5c5a5a;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f4f4;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+}
+
+aside {
+    flex-basis: 55%;
+    background-color: #f4f4f4;
+    padding: 55px;
+}
+
+.section {
+    padding: 15px 0;
+    margin-bottom: 30px;
+    border-left:3px solid #333;
+    padding-left: 25px;
+}
+
+.icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.section h2 {
+    display: flex;
+    align-items: center;
+}
+
+.grid-container{
+    display:grid;
+    grid-template-columns: auto 1fr;
+    grid-gap:25px;
+}
+
+.left-section{
+    flex:1;
+    padding:20px;
+    align-self: flex-start;
+}
+
+.right-section{
+    flex:1;
+    padding:20px;
+    background-color:#ffffff;
+}
+
+.right-section section:nth-child(n+1)
+{
+    border-radius: 5px;
+    padding:20px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+#toggleButton{
+    background-color: #128f17;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+#toggleButton:hover{
+    background-color: #409e44;
+}
+
+#toggleButton:focus{
+    outline: none;
+}
+
+.hideText{
+    display: none;
+}
+
+.colorChange{
+    display:flex;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+
+#green{
+    width: 20px; 
+    height: 20px; 
+    background-color: #409e44;
+    margin-right: 5px; 
+    cursor:pointer;
+}
+
+#white{
+    width: 20px; 
+    height: 20px; 
+    background-color: #fff;
+    margin-right: 5px; 
+    cursor:pointer;
+}
+
+#blue{
+    width: 20px; 
+    height: 20px; 
+    background-color: #00ffff;
+    margin-right: 5px; 
+    cursor:pointer;
+}
+
+#fontSizeSelect {
+    position: absolute; 
+    bottom: 0; 
+    right: 0; 
+    margin: 10px; 
+}
+
+#fontText{
+    position: absolute; 
+    bottom: 20px; 
+    right: 0; 
+    margin: 10px; 
+}
+
+
+@keyframes jiggle {
+    0% { transform: rotate(-2deg); }
+    25% { transform: rotate(2deg); }
+    50% { transform: rotate(-2deg); }
+    75% { transform: rotate(2deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.jiggle {
+    animation: jiggle 0.4s ease-in-out;
+}
+
+.jiggle:hover {
+    animation: jiggle 0.4s ease-in-out infinite;
+}
+
+.link {
+    color: blue; 
+    text-decoration: none;
+}
+
+.link:hover {
+    color: red; 
+}

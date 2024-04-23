@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>CV Hanzu Ioan</h1>
+    <div class="colorChange">
+        <p>COLOR</p>
+        <button id="green"></button>
+        <button id="white"></button>
+        <button id="blue"></button>
+    </div>
+
+    <div>
+        <p id="fontText">FONT SIZE</p>
+        <select id="fontSizeSelect">
+            <option value="small">Small</option>
+            <option value="medium" selected>Medium</option>
+            <option value="large">Large</option>
+        </select>
+    </div>
+    
+</header>
+
+<main class="grid-container">
+    <div class="left-section">
+        <section>
+            <img src="poza.JPG" alt="Poza CV Ioan Hanzu" id="main-photo">
+            <h2>Main Area</h2>
+            <p>Text misto</p>
+        </section>
+    </div>
+
+    <div class="right-section" id="rightSection">
+            <section class="section">
+                <h2>
+                    <span class="icon">&#128100;</span>
+                    Personal Information
+                </h2>
+                <p>Name: Hanzu Ioan</p>
+                <p>Email: hanzuioan5@gmail.com</p>
+                <p>Phone: 0775258163</p>
+            </section>
+        
+            <section class="section">
+                <h2>
+                    <span class="icon">&#127891;</span>
+                    Education
+                </h2>
+                <p>Bachelor of Engineering in Computer Science</p>
+                <p>Lucian Blaga University </p>
+            </section>
+        
+            <section class="section">
+                <h2>
+                    <span class="icon">&#128187;</span>
+                    Work Experience
+                </h2>
+                <p>Software Engineer, ULBS.SRL</p>
+                <p>Responsibilities include:NO</p>
+            </section>
+        
+            <section class="section">
+                <h2>
+                    <span class="icon">&#129488;</span>
+                    Skills
+                </h2>
+                <p>Programming Languages: Java, Python, JavaScript</p>
+                <p>Frameworks: React, Node.js</p>
+            </section>
+    </div>
+    <button id="toggleButton" class="jiggle">Toggle Info</button>
+    <aside id="info" class="hideText">
+        <h2>Adittional Info</h2>
+        <p>Donno wth is this</p>
+    </aside>
+</main>
+
+<footer>
+    <p>&copy; 2024 My CV. All rights reserved</p>
+    <li><a href="https://www.linkedin.com/in/ioan-hanzu-b0866028b/" target="_blank" class="link">Linkedin</a></li>
+    <li><a href="https://www.instagram.com/hanzu_i/" target="_blank" class="link">Instagram</a></li>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
