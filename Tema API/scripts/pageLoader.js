@@ -4,7 +4,6 @@ export class HtmlLoader {
         xhr.open("GET", fetchFrom, true)
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log(xhr.responseText)
                 let targetElement = document.querySelector(`.${whereToLoad}`);
 
                 // Check if the element exists

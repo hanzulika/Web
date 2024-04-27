@@ -22,5 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // If all validations pass, submit the form
         loginForm.submit();
+        window.location.href='index.html';
     });
 });

@@ -1,17 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../styles/style.css">
-    <title>My Web Page</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Playlists</title>
+    <link rel="stylesheet" href="../styles/appStyle.css">
 </head>
-<body>
-    <main class="main">
-        <nav class="navbar"></nav>
-    </main>
+<body onload="onPageLoad()">
 
-      <script src="../scripts/script.js" type="module"></script>
+    <div class="container">
+
+        <div id="tokenSection" class="row">
+            <div class="col">
+                <div class="mb-3">
+            <label for="client_id" class="form-label">Client ID</label>
+            <input type="text" class="form-control" id="client_id" placeholder="">
+        </div>
+        <div class="mb-3">
+            <label for="client_secret" class="form-label">Client Secret</label>
+            <input type="text" class="form-control" id="client_secret" placeholder="">
+        </div>
+        <input class="btn btn-primary btn-lg" type="button" onclick="requestAuthorization()" value="Request Authorization">
+            </div>
+        </div>
+    </div>
+    <div id="deviceSection" class="row">
+        <div class="mb-3">
+            <label for="devices" class="form-label">Devices</label>
+            <select id="devices" class="form-control"></select>
+            <input class="btn btn-primary btn-lg" type="button" onclick="refreshDevices()" value="Refresh Devices">
+            <!--<input type="button" class="btn btn-primary btn-lg" onclick="transfer()" value="Transfer">
+            --></div>
+    </div>
+    <script src="../scripts/spotifyToken.js"></script>
 </body>
-
 </html>
