@@ -6,6 +6,9 @@ var client_seccret ="";
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN= "https://accounts.spotify.com/api/token";
 const DEVICES = "https://api.spotify.com/v1/me/player/devices";
+const PFPIMG = "https://api.spotify.com/v1/me";
+const TOPARTISTS="https://api.spotify.com/v1/me/top/artists?limit=10";
+const TOPTRACKS="https://api.spotify.com/v1/me/top/tracks?limit=10";
 
 function onPageLoad(){
     client_id = localStorage.getItem("client_id");
@@ -14,8 +17,14 @@ function onPageLoad(){
     if(window.location.search.length > 0){
         handleRedirect();
     }
+    if (localStorage.getItem("access_token")) {
+        getInfo();
+        refreshDevices();
+        getTopArtists();
+        getTopTracks();
+    }
 }
-
+var access_token = localStorage.getItem("access_token");
 function handleRedirect(){
     let code = getCode();
     fetchAccessToken(code);
@@ -90,12 +99,104 @@ function requestAuthorization(){
     url += "&response_type=code";
     url += "&redirect_uri=" + encodeURI(redirect_uri);
     url += "&show_dialog=true";
-    url += "&scope=user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-playback-position user-library-read";
+    url += "&scope=user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-playback-position user-library-read user-top-read";
     window.location.href = url;
 }
 
 function refreshDevices(){
     callApi("GET", DEVICES, null, handleDevicesResponse);
+}
+
+function getInfo(){
+    callApi("GET", PFPIMG, null, handleInfoResponse);
+}
+
+function getTopArtists(){
+    callApi("GET", TOPARTISTS, null, handleTopArtistResponse);
+}
+
+function getTopTracks(){
+    callApi("GET", TOPTRACKS, null, handleTopTracksResponse);
+}
+
+function handleTopArtistResponse(){
+    console.log(this.responseText);
+    if(this.status==200){
+        var data=JSON.parse(this.responseText);
+        console.log(data);
+        removeAllItems("topartists");
+        data.items.forEach(item => addArtist(item));
+    }
+    else if(this.status==401){
+        refreshAccessToken();
+    }
+    else{
+        console.log(this.responseText);
+        alert(this.responseText);
+    }
+}
+
+function handleTopTracksResponse(){
+    console.log(this.responseText);
+    if(this.status==200){
+        var data=JSON.parse(this.responseText);
+        console.log(data);
+        removeAllItems("toptracks");
+        data.items.forEach(item => addTrack(item));
+    }
+    else if(this.status==401){
+        refreshAccessToken();
+    }
+    else{
+        console.log(this.responseText);
+        alert(this.responseText);
+    }
+}
+
+function addTrack(item){
+    var node = document.createElement("li");
+    node.innerHTML = item.name;
+    document.getElementById("toptracks").appendChild(node);
+}
+
+function addArtist(item){
+    var node = document.createElement("li");
+    node.innerHTML = item.name;
+    document.getElementById("topartists").appendChild(node);
+}
+
+function handleInfoResponse(){
+    console.log(this.responseText);
+    if(this.status==200){
+        var data=JSON.parse(this.responseText);
+        console.log(data);
+        showImage(data.images[0].url, "pfpimg");
+        showText(data.display_name, "name","h1");
+        showText(data.email, "email","p");
+        showText(data.country, "country","p");
+        showText(data.followers.total, "followers","h2")
+        showText(data.product, "product","h2")
+        showText(data.type, "type","h3")
+    }
+    else if(this.status==401){
+        refreshAccessToken();
+    }
+    else{
+        console.log(this.responseText);
+        alert(this.responseText);
+    }
+}
+
+function showText(name, id,newElement){
+    var node=document.createElement(newElement);
+    node.innerHTML=name;
+    document.getElementById(id).appendChild(node);
+}
+
+function showImage(src, id){
+    var img = document.createElement("img");
+    img.src = src;
+    document.getElementById(id).appendChild(img);
 }
 
 function handleDevicesResponse(){
@@ -137,3 +238,4 @@ function removeAllItems(elementId) {
         node.removeChild(node.firstChild);
     }
 }
+

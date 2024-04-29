@@ -8,53 +8,79 @@
 /* Body styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
+    background-color: #f8f9fa; /* Light gray background */
     padding: 20px;
 }
 
 /* Container styles */
 .container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
-/* Form styles */
-form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
+/* Token section styles */
+#tokenSection {
     margin-bottom: 20px;
 }
 
-.form-group label {
+/* Form input styles */
+.form-label {
     font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
 }
 
 .form-control {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da; /* Gray border */
+    border-radius: 5px;
 }
 
+/* Button styles */
 .btn {
-    cursor: pointer;
-    background-color: #1db954;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
     padding: 10px 20px;
-    font-size: 16px;
-    transition: background-color 0.3s;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #28a745; /* Green color */
+    color: #fff; /* White text */
+    text-align: center;
 }
 
 .btn:hover {
-    background-color: #169a3d;
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Device section styles */
+#deviceSection {
+    margin-top: 20px;
+}
+
+/* Select styles */
+.form-control select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da; /* Gray border */
+    border-radius: 5px;
+}
+
+/* List styles */
+ol {
+    list-style: decimal;
+    padding-left: 20px;
+}
+
+#topartists,
+#toptracks {
+    margin-bottom: 20px;
+}
+
+#topartists li,
+#toptracks li {
+    margin-bottom: 10px;
+    background-color: #fff; /* White background for list items */
+    border: 1px solid #ced4da; /* Gray border */
+    border-radius: 5px;
+    padding: 10px;
 }
