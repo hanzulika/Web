@@ -1,7 +1,11 @@
-var redirect_uri="http://127.0.0.1:5500/Tema%20API/html/page1.html";
+//import { HtmlLoader } from "./pageLoader.js";
 
-var client_id ="";
-var client_seccret ="";
+//let loader=new HtmlLoader;
+
+var redirect_uri="http://127.0.0.1:5500/html/page1.html";
+
+var client_id ="e1e6dc6aac884dd59178e84a009fa95d";
+var client_seccret ="b981d08a455446afa5f81ef3c644b9ec";
 
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN= "https://accounts.spotify.com/api/token";
@@ -18,12 +22,26 @@ function onPageLoad(){
         handleRedirect();
     }
     if (localStorage.getItem("access_token")) {
+        //loader.loadHtml("../extra/menu.html","navbar");
+        loadDynamicPage();
         getInfo();
         refreshDevices();
         getTopArtists();
         getTopTracks();
     }
 }
+
+function loadDynamicPage(){
+    fetch('../extra/afterAuthorization.html')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('dynamicContainer').innerHTML = data;
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
 var access_token = localStorage.getItem("access_token");
 function handleRedirect(){
     let code = getCode();
@@ -119,6 +137,23 @@ function getTopTracks(){
     callApi("GET", TOPTRACKS, null, handleTopTracksResponse);
 }
 
+function handleDevicesResponse(){
+    console.log(this.responseText);
+    if(this.status==200){
+        var data=JSON.parse(this.responseText);
+        console.log(data);
+        removeAllItems("devices");
+        data.devices.forEach(item => addDevice(item));
+    }
+    else if(this.status==401){
+        refreshAccessToken();
+    }
+    else{
+        console.log(this.responseText);
+        alert(this.responseText);
+    }
+}
+
 function handleTopArtistResponse(){
     console.log(this.responseText);
     if(this.status==200){
@@ -153,23 +188,18 @@ function handleTopTracksResponse(){
     }
 }
 
-function addTrack(item){
-    var node = document.createElement("li");
-    node.innerHTML = item.name;
-    document.getElementById("toptracks").appendChild(node);
-}
-
-function addArtist(item){
-    var node = document.createElement("li");
-    node.innerHTML = item.name;
-    document.getElementById("topartists").appendChild(node);
-}
-
 function handleInfoResponse(){
     console.log(this.responseText);
     if(this.status==200){
         var data=JSON.parse(this.responseText);
         console.log(data);
+        removeAllItems("pfpimg");
+        removeAllItems("name");
+        removeAllItems("email");
+        removeAllItems("country");
+        removeAllItems("followers");
+        removeAllItems("product");
+        removeAllItems("type");
         showImage(data.images[0].url, "pfpimg");
         showText(data.display_name, "name","h1");
         showText(data.email, "email","p");
@@ -199,21 +229,16 @@ function showImage(src, id){
     document.getElementById(id).appendChild(img);
 }
 
-function handleDevicesResponse(){
-    console.log(this.responseText);
-    if(this.status==200){
-        var data=JSON.parse(this.responseText);
-        console.log(data);
-        removeAllItems("devices");
-        data.devices.forEach(item => addDevice(item));
-    }
-    else if(this.status==401){
-        refreshAccessToken();
-    }
-    else{
-        console.log(this.responseText);
-        alert(this.responseText);
-    }
+function addTrack(item){
+    var node = document.createElement("li");
+    node.innerHTML = item.name;
+    document.getElementById("toptracks").appendChild(node);
+}
+
+function addArtist(item){
+    var node = document.createElement("li");
+    node.innerHTML = item.name;
+    document.getElementById("topartists").appendChild(node);
 }
 
 function addDevice(item){

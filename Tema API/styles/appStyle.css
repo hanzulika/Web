@@ -1,86 +1,54 @@
-/* Reset default margin and padding */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* appStyle.css */
+
+/* Navbar styles */
+.navbar {
+    background-color: #333; /* Dark background color */
+    color: #fff; /* Light text color */
+    padding: 10px 0; /* Add some padding */
 }
 
-/* Body styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa; /* Light gray background */
-    padding: 20px;
-}
-
-/* Container styles */
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* Token section styles */
-#tokenSection {
-    margin-bottom: 20px;
-}
-
-/* Form input styles */
-.form-label {
-    font-weight: bold;
-}
-
-.form-control {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ced4da; /* Gray border */
-    border-radius: 5px;
+/* Main content styles */
+.main {
+    padding-top: 60px; /* Add padding to avoid content being hidden under the navbar */
+    /* You can adjust this value as needed based on the height of your navbar */
 }
 
 /* Button styles */
 .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #28a745; /* Green color */
-    color: #fff; /* White text */
-    text-align: center;
+    background-color: #28a745; /* Green background color */
+    color: #fff; /* Light text color */
+    border: none; /* Remove borders */
+    padding: 10px 20px; /* Add some padding */
+    cursor: pointer; /* Change cursor to pointer on hover */
 }
 
 .btn:hover {
     background-color: #218838; /* Darker green on hover */
 }
 
-/* Device section styles */
-#deviceSection {
-    margin-top: 20px;
+/* Input styles */
+.form-control {
+    width: 100%; /* Set input width to 100% */
+    padding: 8px; /* Add some padding */
+    margin-bottom: 10px; /* Add margin between inputs */
 }
 
-/* Select styles */
-.form-control select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ced4da; /* Gray border */
-    border-radius: 5px;
+/* Heading styles */
+h2 {
+    margin-top: 20px; /* Add margin above headings */
 }
 
 /* List styles */
 ol {
-    list-style: decimal;
-    padding-left: 20px;
+    padding-left: 20px; /* Add some padding to the left of ordered lists */
 }
 
-#topartists,
-#toptracks {
-    margin-bottom: 20px;
-}
-
-#topartists li,
-#toptracks li {
-    margin-bottom: 10px;
-    background-color: #fff; /* White background for list items */
-    border: 1px solid #ced4da; /* Gray border */
-    border-radius: 5px;
-    padding: 10px;
+/* Container styles */
+.container {
+    max-width: 800px; /* Set maximum width for the container */
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 20px; /* Add some padding */
+    background-color: #f8f9fa; /* Light background color */
+    border-radius: 5px; /* Add some border radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a slight shadow */
 }
