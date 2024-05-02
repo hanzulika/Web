@@ -14,9 +14,14 @@ const PFPIMG = "https://api.spotify.com/v1/me";
 const TOPARTISTS="https://api.spotify.com/v1/me/top/artists?limit=10";
 const TOPTRACKS="https://api.spotify.com/v1/me/top/tracks?limit=10";
 
+function logout(){
+    localStorage.clear();
+    window.location.href = "http://127.0.0.1:5500/html/page1.html";
+}
+
 function onPageLoad(){
-    client_id = localStorage.getItem("client_id");
-    client_seccret = localStorage.getItem("client_secret");
+    //client_id = localStorage.getItem("client_id");
+    //client_seccret = localStorage.getItem("client_secret");
 
     if(window.location.search.length > 0){
         handleRedirect();
@@ -107,8 +112,6 @@ function getCode(){
 }
 
 function requestAuthorization(){
-    client_id = document.getElementById("client_id").value;
-    client_seccret = document.getElementById("client_secret").value;
     localStorage.setItem("client_id", client_id);
     localStorage.setItem("client_secret", client_seccret);
 
@@ -117,7 +120,7 @@ function requestAuthorization(){
     url += "&response_type=code";
     url += "&redirect_uri=" + encodeURI(redirect_uri);
     url += "&show_dialog=true";
-    url += "&scope=user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-playback-position user-library-read user-top-read";
+    url += "&scope=user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-playback-position user-library-read user-library-modify user-top-read";
     window.location.href = url;
 }
 
@@ -201,12 +204,12 @@ function handleInfoResponse(){
         removeAllItems("product");
         removeAllItems("type");
         showImage(data.images[0].url, "pfpimg");
-        showText(data.display_name, "name","h1");
-        showText(data.email, "email","p");
-        showText(data.country, "country","p");
-        showText(data.followers.total, "followers","h2")
-        showText(data.product, "product","h2")
-        showText(data.type, "type","h3")
+        addText(data.display_name, "name","h1");
+        addText(data.email, "email","p");
+        addText(data.country, "country","p");
+        addText(data.followers.total, "followers","h2")
+        addText(data.product, "product","h2")
+        addText(data.type, "type","h3")
     }
     else if(this.status==401){
         refreshAccessToken();
@@ -217,7 +220,7 @@ function handleInfoResponse(){
     }
 }
 
-function showText(name, id,newElement){
+function addText(name, id,newElement){
     var node=document.createElement(newElement);
     node.innerHTML=name;
     document.getElementById(id).appendChild(node);

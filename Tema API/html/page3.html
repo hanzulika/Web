@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../styles/style.css">
-    <title>My Web Page</title>
-</head>
-<body>
-    <main class="main">
-        <nav class="navbar"></nav>
-    </main>
 
-      <script src="../scripts/dynamicMenu.js" type="module"></script>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../styles/style.css">
+  <title>My Web Page</title>
+</head>
+
+<body onload="onPageLoad()">
+  <main class="main">
+    <nav class="navbar"></nav>
+  </main>
+  <div class="container">
+    <div id="dynamicContainer"></div>
+  </div>
+
+  <script src="../scripts/albums.js"></script>
+  <script src="../scripts/dynamicMenu.js" type="module"></script>
 </body>
 
 </html>
