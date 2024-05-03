@@ -1,7 +1,3 @@
-//import { HtmlLoader } from "./pageLoader.js";
-
-//let loader=new HtmlLoader;
-
 var redirect_uri="http://127.0.0.1:5500/html/page1.html";
 
 var client_id ="e1e6dc6aac884dd59178e84a009fa95d";
@@ -16,19 +12,15 @@ const TOPTRACKS="https://api.spotify.com/v1/me/top/tracks?limit=10";
 
 function logout(){
     localStorage.clear();
-    window.location.href = "http://127.0.0.1:5500/html/page1.html";
+    window.location.href = "http://127.0.0.1:5500/html/index.html";
 }
 
-function onPageLoad(){
-    //client_id = localStorage.getItem("client_id");
-    //client_seccret = localStorage.getItem("client_secret");
-
+function onProfileLoad(){
     if(window.location.search.length > 0){
         handleRedirect();
     }
     if (localStorage.getItem("access_token")) {
-        //loader.loadHtml("../extra/menu.html","navbar");
-        loadDynamicPage();
+        loadProfilePage();
         getInfo();
         refreshDevices();
         getTopArtists();
@@ -36,11 +28,11 @@ function onPageLoad(){
     }
 }
 
-function loadDynamicPage(){
+function loadProfilePage(){
     fetch('../extra/afterAuthorization.html')
     .then(response => response.text())
     .then(data => {
-        document.getElementById('dynamicContainer').innerHTML = data;
+        document.getElementById('userInfo').innerHTML = data;
     })
     .catch(error => {
         console.error(error);
@@ -120,7 +112,7 @@ function requestAuthorization(){
     url += "&response_type=code";
     url += "&redirect_uri=" + encodeURI(redirect_uri);
     url += "&show_dialog=true";
-    url += "&scope=user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-playback-position user-library-read user-library-modify user-top-read";
+    url += "&scope=user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-playback-position user-library-read user-library-modify user-top-read user-follow-read user-follow-modify playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-read-recently-played user-read-currently-playing app-remote-control streaming";
     window.location.href = url;
 }
 

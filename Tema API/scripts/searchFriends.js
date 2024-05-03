@@ -14,7 +14,7 @@ function loadDynamicPage(){
     fetch('../extra/userSearched.html')
     .then(response => response.text())
     .then(data => {
-        document.getElementById('dynamicContainer').innerHTML = data;
+        document.getElementById('friends').innerHTML = data;
         resolve();
     })
     .catch(error => {
