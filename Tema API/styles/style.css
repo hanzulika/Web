@@ -173,3 +173,7 @@ a:hover,.album-link:hover,.list-option:hover {
   cursor: pointer;
 }
 
+.item{
+  display:inline-block;
+  margin-right:10px;
+}

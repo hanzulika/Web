@@ -49,6 +49,7 @@ function handleSearchResponse(){
         addText(data.display_name, "name", "h1");
         addText(data.followers.total, "followers", "p");
         addLink(data.id,"LINK LA CONT", "external_url");
+        addText(data.uri, "uri", "p");
     }
     else if(this.status==401){
         console.log(this.responseText);

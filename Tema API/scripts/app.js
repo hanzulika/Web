@@ -85,7 +85,6 @@ function handleAuthorizationResponse(){
             refresh_token=data.refresh_token;
             localStorage.setItem("refresh_token", refresh_token);
         }
-        onPageLoad();
     }
     else{
         console.log(this.responseText);

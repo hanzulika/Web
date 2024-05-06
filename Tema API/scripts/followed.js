@@ -4,6 +4,7 @@ const PLAYLISTS = "https://api.spotify.com/v1/me/playlists?limit=50";
 
 let afterID = null;
 let offset = 0;
+let currentUserID = null;
 
 var access_token = localStorage.getItem("access_token");
 
@@ -20,6 +21,17 @@ function callApi(method, url, body, callback) {
     xhr.setRequestHeader("Authorization", "Bearer " + access_token);
     xhr.send(body);
     xhr.onload = callback;
+}
+
+function getCurrentUserId() {
+    callApi("GET", "https://api.spotify.com/v1/me", null, function() {
+        if (this.status == 200) {
+            const data = JSON.parse(this.responseText);
+            currentUserID = data.id;
+        } else {
+            console.error("Failed to get current user ID");
+        }
+    });
 }
 
 function loadAlbumPage() {
@@ -40,8 +52,8 @@ function onPageLoad() {
     clearParams();
     if (localStorage.getItem("access_token")) {
         loadAlbumPage().then(() => {
-            //albumSearch();
-            artistSearch();
+            getCurrentUserId();
+            albumSearch();
         }).catch((error) => {
             console.error(error);
         });
@@ -108,7 +120,8 @@ function handlePlaylistsResponse() {
         }
         data.items.forEach(item => {
             let imgUrl = item.images && item.images.length > 0 ? item.images[0].url : "../extra/smile.jpg";
-            addAlbum(item.name, imgUrl, item.external_urls.spotify);
+            if (item.owner.id !== currentUserID)
+                addAlbum(item.name, imgUrl, item.external_urls.spotify);
         });
         if (data.total > offset + 49) {
             offset += 50;
@@ -149,8 +162,6 @@ function handleArtistsResponse() {
         alert(this.responseText);
     }
 }
-
-
 
 
 function addAlbum(albumName, imgUrl, albumLink) {
