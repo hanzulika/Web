@@ -1,12 +1,10 @@
-var redirect_uri="http://127.0.0.1:5500/html/page1.html";
+var redirect_uri="http://127.0.0.1:5500/html/index.html";
 
-var client_id ="e1e6dc6aac884dd59178e84a009fa95d";
-var client_seccret ="b981d08a455446afa5f81ef3c644b9ec";
+var client_id ="91d81366c47b41f9ae1319609aebd3f0";
+var client_seccret ="5fe6af063fda42c3b0f85ca1132994cd";
 
-const DEVICES = "https://api.spotify.com/v1/me/player/devices";
-const PFPIMG = "https://api.spotify.com/v1/me";
-const TOPARTISTS="https://api.spotify.com/v1/me/top/artists?limit=10";
-const TOPTRACKS="https://api.spotify.com/v1/me/top/tracks?limit=10";
+const AUTHORIZE = "https://accounts.spotify.com/authorize";
+const TOKEN= "https://accounts.spotify.com/api/token";
 
 function logout(){
     localStorage.clear();
@@ -19,18 +17,14 @@ function onProfileLoad(){
     }
     if (localStorage.getItem("access_token")) {
         loadProfilePage();
-        getInfo();
-        refreshDevices();
-        getTopArtists();
-        getTopTracks();
     }
 }
 
 function loadProfilePage(){
-    fetch('../extra/afterAuthorization.html')
+    fetch('../extra/guesser.html')
     .then(response => response.text())
     .then(data => {
-        document.getElementById('userInfo').innerHTML = data;
+        document.getElementById('container').innerHTML = data;
     })
     .catch(error => {
         console.error(error);
@@ -113,102 +107,6 @@ function requestAuthorization(){
     window.location.href = url;
 }
 
-function refreshDevices(){
-    callApi("GET", DEVICES, null, handleDevicesResponse);
-}
-
-function getInfo(){
-    callApi("GET", PFPIMG, null, handleInfoResponse);
-}
-
-function getTopArtists(){
-    callApi("GET", TOPARTISTS, null, handleTopArtistResponse);
-}
-
-function getTopTracks(){
-    callApi("GET", TOPTRACKS, null, handleTopTracksResponse);
-}
-
-function handleDevicesResponse(){
-    console.log(this.responseText);
-    if(this.status==200){
-        var data=JSON.parse(this.responseText);
-        console.log(data);
-        removeAllItems("devices");
-        data.devices.forEach(item => addDevice(item));
-    }
-    else if(this.status==401){
-        refreshAccessToken();
-    }
-    else{
-        console.log(this.responseText);
-        alert(this.responseText);
-    }
-}
-
-function handleTopArtistResponse(){
-    console.log(this.responseText);
-    if(this.status==200){
-        var data=JSON.parse(this.responseText);
-        console.log(data);
-        removeAllItems("topartists");
-        data.items.forEach(item => addArtist(item));
-    }
-    else if(this.status==401){
-        refreshAccessToken();
-    }
-    else{
-        console.log(this.responseText);
-        alert(this.responseText);
-    }
-}
-
-function handleTopTracksResponse(){
-    console.log(this.responseText);
-    if(this.status==200){
-        var data=JSON.parse(this.responseText);
-        console.log(data);
-        removeAllItems("toptracks");
-        data.items.forEach(item => addTrack(item));
-    }
-    else if(this.status==401){
-        refreshAccessToken();
-    }
-    else{
-        console.log(this.responseText);
-        alert(this.responseText);
-    }
-}
-
-function handleInfoResponse(){
-    console.log(this.responseText);
-    if(this.status==200){
-        var data=JSON.parse(this.responseText);
-        console.log(data);
-        removeAllItems("pfpimg");
-        removeAllItems("name");
-        removeAllItems("email");
-        removeAllItems("country");
-        removeAllItems("followers");
-        removeAllItems("product");
-        removeAllItems("type");
-        showImage(data.images[0].url, "pfpimg");
-        addText(data.display_name, "name","h1");
-        addText(data.email, "email","p");
-        addText(data.country, "country","p");
-        addText(data.followers.total, "followers","h2")
-        addText(data.product, "product","h2")
-        addText(data.type, "type","h3")
-    }
-    else if(this.status==401){
-        refreshAccessToken();
-    }
-    else{
-        console.log(this.responseText);
-        alert(this.responseText);
-    }
-}
-
 function addText(name, id,newElement){
     var node=document.createElement(newElement);
     node.innerHTML=name;
@@ -219,25 +117,6 @@ function showImage(src, id){
     var img = document.createElement("img");
     img.src = src;
     document.getElementById(id).appendChild(img);
-}
-
-function addTrack(item){
-    var node = document.createElement("li");
-    node.innerHTML = item.name;
-    document.getElementById("toptracks").appendChild(node);
-}
-
-function addArtist(item){
-    var node = document.createElement("li");
-    node.innerHTML = item.name;
-    document.getElementById("topartists").appendChild(node);
-}
-
-function addDevice(item){
-    let node=document.createElement("option");
-    node.value=item.id;
-    node.innerHTML=item.name;
-    document.getElementById("devices").appendChild(node);
 }
 
 function callApi(method, url, body, callback){

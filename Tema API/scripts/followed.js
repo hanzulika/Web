@@ -64,26 +64,40 @@ function onPageLoad() {
 }
 
 function albumSearch() {
+    document.getElementById("loadingSpinner").style.display = "block";
+    removeAllItems("followedList");
     callApi("GET", ALBUMS, null, handleAlbumsResponse);
 }
 
 function playlistSearch() {
+    document.getElementById("loadingSpinner").style.display = "block";
+
     let url = PLAYLISTS;
     if (offset > 0) {
         url += `&offset=${offset}`;
+    }
+    else{
+        removeAllItems("followedList");
     }
     callApi("GET", url, null, handlePlaylistsResponse);
 }
 
 function artistSearch() {
+    document.getElementById("loadingSpinner").style.display = "block";
+
     let url = ARTISTS;
     if (afterID !== null) {
         url += `&after=${afterID}`;
+    }
+    else{
+        removeAllItems("followedList");
     }
     callApi("GET", url, null, handleArtistsResponse);
 }
 
 function handleAlbumsResponse() {
+    document.getElementById("loadingSpinner").style.display = "none";
+
     console.log(this.responseText);
     if (this.status == 200) {
         var data = JSON.parse(this.responseText);
@@ -95,11 +109,6 @@ function handleAlbumsResponse() {
             let imgUrl = item.album.images && item.album.images.length > 0 ? item.album.images[0].url : "../extra/smile.jpg";
             addAlbum(item.album.name, imgUrl, item.album.external_urls.spotify);
         });
-        if (data.total > offset + 49) {
-            offset += 50;
-            console.log(offset)
-            playlistSearch();
-        }
     }
     else if (this.status == 401) {
         refreshAccessToken();
@@ -111,6 +120,8 @@ function handleAlbumsResponse() {
 }
 
 function handlePlaylistsResponse() {
+    document.getElementById("loadingSpinner").style.display = "none";
+
     console.log(this.responseText);
     if (this.status == 200) {
         var data = JSON.parse(this.responseText);
@@ -139,6 +150,8 @@ function handlePlaylistsResponse() {
 }
 
 function handleArtistsResponse() {
+    document.getElementById("loadingSpinner").style.display = "none";
+
     console.log(this.responseText);
     if (this.status == 200) {
         var data = JSON.parse(this.responseText);

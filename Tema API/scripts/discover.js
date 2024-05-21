@@ -1,4 +1,4 @@
-const NEW_ALBUMS = "https://api.spotify.com/v1/browse/new-releases";
+const NEW_ALBUMS = "https://api.spotify.com/v1/browse/new-releases?limit=50";
 const BEST_PLAYLISTS = "https://api.spotify.com/v1/users/o6qdc6hp5871x29s9y2hfwamw/playlists";
 
 function loadNewAlbums() {
@@ -202,7 +202,6 @@ async function followOrUnfollow(link) {
     return action;
 }
 
-
 async function addToPage(name, img, link, ID) {
     let node = document.createElement("div");
     node.className = "item";
@@ -235,17 +234,13 @@ async function addToPage(name, img, link, ID) {
     }
 
     addNode.onclick = async function () {
-        // Display loading indicator while waiting for response
         addNode.innerText = "Loading...";
 
-        // Call followOrUnfollow function and log the result
         const result = await followOrUnfollow(link);
         console.log("Result:", result);
 
-        // Update button text with response
         addNode.innerText = result;
     };
-
 
     node.appendChild(aNode);
     node.appendChild(addNode);
