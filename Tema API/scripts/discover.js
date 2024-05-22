@@ -16,16 +16,23 @@ function loadNewAlbums() {
 }
 
 function onHomePageLoad() {
+    document.getElementById('loadingInfo').style.display = 'block';
+    document.getElementById('homepage').style.display = 'none'; // Hide the 'homepage' element
     if (localStorage.getItem("access_token")) {
         access_token = localStorage.getItem("access_token");
-        loadNewAlbums().then(() => {
-            newAlbumSearch();
-            bestPlaylistSearch();
-        }).catch((error) => {
+        Promise.all([loadNewAlbums(), newAlbumSearch(), bestPlaylistSearch()])
+        .then(() => {
+            setTimeout(() => {
+                document.getElementById('loadingInfo').style.display = 'none';
+                document.getElementById('homepage').style.display = 'block'; // Show the 'homepage' element
+            }, 2000); // Delay of 2 seconds
+        })
+        .catch((error) => {
             console.error(error);
         });
     }
     else {
+        window.location.href="../html/page1.html";
         alert("You need to log in first!");
     }
 }
@@ -219,6 +226,7 @@ async function addToPage(name, img, link, ID) {
     aNode.appendChild(imgNode);
 
     var textNode = document.createElement("p");
+    textNode.className="album-name";
     textNode.innerHTML = name;
     aNode.appendChild(textNode);
 

@@ -59,6 +59,7 @@ function onPageLoad() {
         });
     }
     else {
+        window.location.href = "../html/page1.html";
         alert("You need to log in first!");
     }
 }
