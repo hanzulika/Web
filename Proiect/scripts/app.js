@@ -11,21 +11,20 @@ function logout(){
     window.location.href = "http://127.0.0.1:5500/html/index.html";
 }
 
-function onProfileLoad(){
+function onLoad(){
+    addNavbar();
     if(window.location.search.length > 0){
         handleRedirect();
     }
-    if (localStorage.getItem("access_token")) {
-        loadProfilePage();
-    }
 }
 
-function loadProfilePage(){
-    fetch('../extra/guesser.html')
+function addNavbar(){
+    fetch('../extra/navbar.html')
     .then(response => response.text())
     .then(data => {
-        document.getElementById('container').innerHTML = data;
-    })
+        document.getElementById('navbar').innerHTML = data;
+    }
+    )
     .catch(error => {
         console.error(error);
     });
@@ -72,6 +71,7 @@ function handleAuthorizationResponse(){
         if(data.access_token!=undefined){
             access_token=data.access_token;
             localStorage.setItem("access_token", access_token);
+            loadProfilePage();
         }
         if(data.refresh_token!=undefined){
             refresh_token=data.refresh_token;
@@ -119,13 +119,20 @@ function showImage(src, id){
     document.getElementById(id).appendChild(img);
 }
 
-function callApi(method, url, body, callback){
-    let xhr = new XMLHttpRequest();
-    xhr.open(method, url, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer " + access_token);
-    xhr.send(body);
-    xhr.onload = callback;
+function callApi(method, url, body, callback) {
+  let xhr = new XMLHttpRequest();
+
+  xhr.open(method, url, true);
+  xhr.setRequestHeader('Authorization', 'Bearer ' + access_token); // Set the access token here
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      callback(JSON.parse(xhr.responseText)); // Pass the response data to the callback
+    } else if (xhr.readyState === 4) {
+      console.error(xhr.responseText);
+    }
+  };
+  xhr.send(JSON.stringify(body));
 }
 
 function removeAllItems(elementId) {
