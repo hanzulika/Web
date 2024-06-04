@@ -1,4 +1,4 @@
-var redirect_uri="http://127.0.0.1:5500/html/index.html";
+var redirect_uri="https://spotify-guesser-1ab78.web.app/";
 
 var client_id ="91d81366c47b41f9ae1319609aebd3f0";
 var client_seccret ="5fe6af063fda42c3b0f85ca1132994cd";
@@ -8,7 +8,7 @@ const TOKEN= "https://accounts.spotify.com/api/token";
 
 function logout(){
     localStorage.clear();
-    window.location.href = "http://127.0.0.1:5500/html/index.html";
+    window.location.href = "https://spotify-guesser-1ab78.web.app/";
 }
 
 function onLoad(){
@@ -95,15 +95,12 @@ function getCode(){
 }
 
 function requestAuthorization(){
-    localStorage.setItem("client_id", client_id);
-    localStorage.setItem("client_secret", client_seccret);
-
     let url = AUTHORIZE;
     url += "?client_id=" + client_id;
     url += "&response_type=code";
-    url += "&redirect_uri=" + encodeURI(redirect_uri);
+    url += "&redirect_uri=" + encodeURIComponent(redirect_uri);
     url += "&show_dialog=true";
-    url += "&scope=user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-playback-position user-library-read user-library-modify user-top-read user-follow-read user-follow-modify playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-read-recently-played user-read-currently-playing app-remote-control streaming";
+    url += "&scope=" + encodeURIComponent("user-read-private user-read-email user-read-playback-state user-modify-playback-state user-read-playback-position user-library-read user-library-modify user-top-read user-follow-read user-follow-modify playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-read-recently-played user-read-currently-playing app-remote-control streaming");
     window.location.href = url;
 }
 
@@ -119,20 +116,31 @@ function showImage(src, id){
     document.getElementById(id).appendChild(img);
 }
 
-function callApi(method, url, body, callback) {
-  let xhr = new XMLHttpRequest();
+let retryIn = 1000; // Start with waiting 1 second
 
-  xhr.open(method, url, true);
-  xhr.setRequestHeader('Authorization', 'Bearer ' + access_token); // Set the access token here
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      callback(JSON.parse(xhr.responseText)); // Pass the response data to the callback
-    } else if (xhr.readyState === 4) {
-      console.error(xhr.responseText);
-    }
-  };
-  xhr.send(JSON.stringify(body));
+function callApi(method, url, body, callback) {
+    let xhr = new XMLHttpRequest();
+    xhr.open(method, url, true);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+    xhr.send(body);
+
+    xhr.onload = function() {
+        if (xhr.status === 429) {
+            // If status is 429, retry after the current wait time
+            setTimeout(() => callApi(method, url, body, callback), retryIn);
+            // Double the wait time for the next potential retry
+            retryIn *= 2;
+        } else if (xhr.status >= 200 && xhr.status < 300) {
+            // If status is between 200 and 299, process the response
+            let data = JSON.parse(xhr.responseText);
+            callback(data);
+            // Reset the wait time
+            retryIn = 1000;
+        } else {
+            // If status is something else, log an error
+            console.error(xhr);
+        }
+    };
 }
 
 function removeAllItems(elementId) {

@@ -113,7 +113,7 @@ body{
     flex-direction: column;
     justify-content: space-between;
     width: 500px;
-    height: 400px; /* adjust as needed */
+    height: 500px; /* adjust as needed */
     margin: 20px 0; /* adjust as needed */
     background-color: #ffffff; /* adjust as needed */
     border-radius: 12px; /* adjust as needed */
@@ -122,24 +122,43 @@ body{
 
   #small-box-container{
     display:flex;
-    flex-direction:row;
     justify-content: space-between;
   }
 
+  #small-box-container p{
+    order:2;
+  }
 
   .small-box {
-    width: 20%; /* adjust as needed */
+    order:3;
+    width:100px; /* adjust as needed */
     height: 50px; /* adjust as needed */
     margin: 10px; /* adjust as needed */
     background-color: #f8f9fa; /* adjust as needed */
   }
   
   #big-box {
+    order:1;
     flex-grow: 1; /* this will make the box take up the rest of the space in the #guess-box */
     background-color: #f8f9fa; /* adjust as needed */
   }
   
   #big-box img {
-    width: 100%; /* this will make the image take up the full width of the #big-box */
-    height: auto; /* this will maintain the image's aspect ratio */
+    width: 100%; /* full width of the #big-box */
+    height: 500px; /* fixed height */
+    object-fit: cover; 
   }
+
+  #data-list {
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+#dropdown {
+  background-color: #fff;
+  max-height: 100px; /* Adjust as needed */
+  overflow-y: auto;
+  z-index: 1;
+  position: relative;
+  display: none;
+}

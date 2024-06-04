@@ -1,0 +1,31 @@
+<h1>Guess the Artist</h1>
+<h3 id="tries">Tries:</h3>
+<div id=guess-container>
+  <div id="guess-box">
+    <div id="big-box">
+      <img src="../extra/guess-image.png" alt="Description of image">
+    </div>
+    <div id="small-box-container">
+      <div class="box-container">
+        <p>Genre</p>
+        <div class="small-box" id="genre"></div>
+      </div>
+      <div class="box-container">
+        <p>Popularity</p>
+        <div class="small-box" id="popularity"></div>
+      </div>
+      <div class="box-container">
+        <p>First Album</p>
+        <div class="small-box" id="firstAlbum"></div>
+      </div>
+      <div class="box-container">
+        <p>Related Artist</p>
+        <div class="small-box" id="relatedArtist"></div>
+      </div>
+    </div>
+  </div>
+
+  <input id="guess-input">
+  <div id="dropdown"></div>
+  <input id="guess-button" type="button" value="Guess" onclick="guessArtist()">
+</div>
