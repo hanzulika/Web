@@ -1,5 +1,5 @@
 var redirect_uri="https://spotify-guesser-1ab78.web.app/";
-
+//var redirect_uri="http://127.0.0.1:5500/public/index.html";
 var client_id ="91d81366c47b41f9ae1319609aebd3f0";
 var client_seccret ="5fe6af063fda42c3b0f85ca1132994cd";
 
@@ -8,7 +8,7 @@ const TOKEN= "https://accounts.spotify.com/api/token";
 
 function logout(){
     localStorage.clear();
-    window.location.href = "https://spotify-guesser-1ab78.web.app/";
+    window.location.href = redirect_uri;
 }
 
 function onLoad(){
@@ -19,7 +19,7 @@ function onLoad(){
 }
 
 function addNavbar(){
-    fetch('../extra/navbar.html')
+    fetch('./extra/navbar.html')
     .then(response => response.text())
     .then(data => {
         document.getElementById('navbar').innerHTML = data;
@@ -116,32 +116,21 @@ function showImage(src, id){
     document.getElementById(id).appendChild(img);
 }
 
-let retryIn = 1000; // Start with waiting 1 second
-
 function callApi(method, url, body, callback) {
     let xhr = new XMLHttpRequest();
+  
     xhr.open(method, url, true);
-    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-    xhr.send(body);
-
-    xhr.onload = function() {
-        if (xhr.status === 429) {
-            // If status is 429, retry after the current wait time
-            setTimeout(() => callApi(method, url, body, callback), retryIn);
-            // Double the wait time for the next potential retry
-            retryIn *= 2;
-        } else if (xhr.status >= 200 && xhr.status < 300) {
-            // If status is between 200 and 299, process the response
-            let data = JSON.parse(xhr.responseText);
-            callback(data);
-            // Reset the wait time
-            retryIn = 1000;
-        } else {
-            // If status is something else, log an error
-            console.error(xhr);
-        }
+    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token); // Set the access token here
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        callback(JSON.parse(xhr.responseText)); // Pass the response data to the callback
+      } else if (xhr.readyState === 4) {
+        console.error(xhr.responseText);
+      }
     };
-}
+    xhr.send(JSON.stringify(body));
+  }
 
 function removeAllItems(elementId) {
     let node = document.getElementById(elementId);

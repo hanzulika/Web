@@ -104,8 +104,16 @@ body{
   }
 
 #guess-container{
+  position:relative;
   display: flex;
   flex-direction: column; /* Add this line */
+}
+
+#tries{
+  position: absolute;
+  left:-150px;
+  top:300px;
+  order:-1;
 }
 
   #guess-box{

@@ -4,23 +4,19 @@ function onPageLoad() {
     onLoad();
     if (localStorage.getItem("access_token")) {
         loadProfilePage();
-        console.log('Profile page loaded');
         loadArtists();
-        console.log('Artists loaded');
-        //getRandomArtist();
-        console.log('Random artist selected');
-        //updateTries(0);
     }
 }
 
 function loadProfilePage() {
-    fetch('../extra/guesser.html')
+    fetch('./extra/guesser.html')
         .then(response => response.text())
         .then(data => {
             document.getElementById('container').innerHTML = data;
         })
         .then(() => {
-            addEventListeners('guess-input','dropdown', artists);
+            //addEventListeners('guess-input', 'dropdown', artists);
+            updateTries(0);
         })
         .catch(error => {
             console.error(error);
@@ -29,7 +25,12 @@ function loadProfilePage() {
 
 function loadArtists() {
     // Call the API to get the followed artists
-    callApi('GET', FOLLOWED_ARTISTS, null, handleArtistResponse);
+    callApi('GET', FOLLOWED_ARTISTS, null, function(response) {
+        // Handle the artist response
+        handleArtistResponse(response);
+        // After the artists have been loaded, get a random artist
+        getRandomArtist();
+    });
 }
 
 let artists = []; // Array to store the artists
@@ -42,9 +43,22 @@ function handleArtistResponse(data) {
         data.artists.items.forEach(item => {
             // Check if any of the artist's parameters are null
             if (item.name && item.genres && item.genres[0] && item.id && item.popularity && item.images && item.images[0]) {
+                let genre = item.genres[0].toLowerCase();
+                if (genre.includes('indie')) {
+                    genre = 'indie';
+                } else if (genre.includes('metal')|| genre.includes('death') || genre.includes('black') || genre.includes('thrash') || genre.includes('doom') || genre.includes('power') || genre.includes('progressive') || genre.includes('symphonic') || genre.includes('folk') || genre.includes('viking') || genre.includes('gothic') || genre.includes('nu') || genre.includes('grindcore') || genre.includes('hardcore') || genre.includes('metalcore') || genre.includes('post') || genre.includes('sludge') || genre.includes('stoner') || genre.includes('glam') || genre.includes('hair') || genre.includes('speed') || genre.includes('thrash')){
+                    genre = 'metal';
+                } else if (genre.includes('rock') || genre.includes('punk')) {
+                    genre = 'rock';
+                } else if (genre.includes('pop')) {
+                    genre = 'pop';
+                } else if (genre.includes('rap') || genre.includes('hip hop')) {
+                    genre = 'rap';
+                }
+                
                 let artist = {
                     name: item.name,
-                    genre: item.genres[0],
+                    genre: genre,
                     id: item.id,
                     popularity: item.popularity,
                     image: item.images[0]
@@ -73,8 +87,10 @@ function handleArtistResponse(data) {
                     }
                 });
             });
+
+            // Load the first related artist for each artist
             artists.forEach(artist => {
-                loadFirstRelatedArtist(artist, function(updatedArtist) {
+                loadFirstRelatedArtist(artist, function (updatedArtist) {
                     // Replace the artist in the array with the updated artist
                     let index = artists.findIndex(a => a.id === updatedArtist.id);
                     if (index !== -1) {
@@ -82,35 +98,31 @@ function handleArtistResponse(data) {
                     }
                 });
             });
-            // Log the artists array when there are no more artists to fetch
+
             console.log(artists);
+
+            addEventListeners('guess-input', 'dropdown', artists);
         }
     } else {
         console.error('Data or data.artists.items is undefined');
     }
 }
 
-let delay = 0; // Start with no delay
-
 function loadFirstAlbum(artist, callback) {
-    // Increase the delay by 100 ms for each artist
-    delay += 100;
-    setTimeout(() => {
-        callApi('GET', 'https://api.spotify.com/v1/artists/' + artist.id + '/albums', null, function (data) {
-            if (data && data.items && data.items.length > 0) {
-                // Sort the albums by release date in ascending order
-                data.items.sort((a, b) => a.release_date.localeCompare(b.release_date));
-                // Add the release year of the oldest album to the artist
-                artist.firstAlbum = data.items[0].release_date.split('-')[0];
-            } else {
-                console.error('No albums found for artist ' + artist.name);
-                // Set firstAlbum to "unknown" if the artist does not have any albums
-                artist.firstAlbum = "unknown";
-            }
-            // Call the callback function
-            callback();
-        });
-    }, delay);
+    callApi('GET', 'https://api.spotify.com/v1/artists/' + artist.id + '/albums', null, function (data) {
+        if (data && data.items && data.items.length > 0) {
+            // Sort the albums by release date in ascending order
+            data.items.sort((a, b) => a.release_date.localeCompare(b.release_date));
+            // Add the release year of the oldest album to the artist
+            artist.firstAlbum = data.items[0].release_date.split('-')[0];
+        } else {
+            console.error('No albums found for artist ' + artist.name);
+            // Set firstAlbum to "unknown" if the artist does not have any albums
+            artist.firstAlbum = "unknown";
+        }
+        // Call the callback function
+        callback(artist);
+    });
 }
 
 function loadFirstRelatedArtist(artist, callback) {
@@ -128,8 +140,7 @@ function loadFirstRelatedArtist(artist, callback) {
     });
 }
 
-
-let selectedArtist = null;
+let randomArtist = null;
 
 function getRandomArtist() {
     // Check if artists array is not empty
@@ -137,8 +148,8 @@ function getRandomArtist() {
         // Generate a random index
         let randomIndex = Math.floor(Math.random() * artists.length);
         // Store the artist at the random index
-        selectedArtist = artists[randomIndex];
-        console.log(selectedArtist);
+        randomArtist = artists[randomIndex];
+        console.log(randomArtist);
     } else {
         console.error('No artists available');
     }
@@ -191,7 +202,7 @@ function addEventListeners(inputFieldId, dropdownId, artists) {
 function updateTries(x) {
     var triesElement = document.getElementById('tries');
     if (triesElement) {
-        triesElement.textContent = `${x}/10`;
+        triesElement.textContent = `Tries: ${x}/10`;
     } else {
         console.error('Element with id "tries" not found');
     }
@@ -206,23 +217,66 @@ function guessArtist() {
     var artist = artists.find(artist => artist.name.toLowerCase() === guessedArtistName.toLowerCase());
 
     if (artist) {
-        document.getElementById('genre').innerHTML = '<p>Genre</p>' + artist.genre;
-        document.getElementById('popularity').innerHTML = '<p>Popularity</p>' + artist.popularity;
-        document.getElementById('firstAlbum').innerHTML = '<p>First Album</p>' + artist.firstAlbum;
-        document.getElementById('relatedArtist').innerHTML = '<p>Related Artist</p>' + artist.related;
+        var genreBox = document.getElementById('genre');
+        var popularityBox = document.getElementById('popularity');
+        var firstAlbumBox = document.getElementById('firstAlbum');
+    
+        genreBox.innerHTML = artist.genre;
+        popularityBox.innerHTML = artist.popularity;
+        firstAlbumBox.innerHTML = artist.firstAlbum;
+        document.getElementById('relatedArtist').innerHTML = artist.related;
+    
         var bigBoxImage = document.querySelector('#big-box img');
         if (bigBoxImage) {
             bigBoxImage.src = artist.image.url;
         }
+    
+        // Compare genres
+        if (artist.genre === randomArtist.genre) {
+            genreBox.style.backgroundColor = 'green';
+        } else {
+            genreBox.style.backgroundColor = 'red';
+        }
 
-        if (artist.name === selectedArtist.name &&
-            artist.genre === selectedArtist.genre &&
-            artist.popularity === selectedArtist.popularity &&
-            artist.firstAlbum === selectedArtist.firstAlbum &&
-            artist.related === selectedArtist.related &&
-            artist.image.url === selectedArtist.image.url) {
+        // Compare popularity
+        if (artist.popularity === randomArtist.popularity) {
+            popularityBox.style.backgroundColor = 'green';
+        } else if (Math.abs(artist.popularity - randomArtist.popularity) <= 10) {
+            popularityBox.style.backgroundColor = 'orange';
+        } else {
+            popularityBox.style.backgroundColor = 'red';
+        }
+        // Add arrow for popularity
+        if (artist.popularity > randomArtist.popularity) {
+            popularityBox.innerHTML += ' ↓';
+        } else if (artist.popularity < randomArtist.popularity) {
+            popularityBox.innerHTML += ' ↑';
+        }
+
+        // Compare firstAlbum
+        if (artist.firstAlbum === randomArtist.firstAlbum) {
+            firstAlbumBox.style.backgroundColor = 'green';
+        } else if (Math.abs(artist.firstAlbum - randomArtist.firstAlbum) <= 4) {
+            firstAlbumBox.style.backgroundColor = 'orange';
+        } else {
+            firstAlbumBox.style.backgroundColor = 'red';
+        }
+        // Add arrow for firstAlbum
+        if (artist.firstAlbum > randomArtist.firstAlbum) {
+            firstAlbumBox.innerHTML += ' ↓';
+        } else if (artist.firstAlbum < randomArtist.firstAlbum) {
+            firstAlbumBox.innerHTML += ' ↑';
+        }
+    
+        if (artist.name === randomArtist.name &&
+            artist.genre === randomArtist.genre &&
+            artist.popularity === randomArtist.popularity &&
+            artist.firstAlbum === randomArtist.firstAlbum &&
+            artist.related === randomArtist.related &&
+            artist.image.url === randomArtist.image.url) {
             alert('You guessed the artist');
         }
+    
     } else {
         alert('Artist not found');
     }
@@ -232,7 +286,8 @@ function guessArtist() {
         counter++;
     } else {
         alert('You have reached the maximum number of tries');
+        counter=1;
+        getRandomArtist();
+        updateTries(0);
     }
 }
-
-
