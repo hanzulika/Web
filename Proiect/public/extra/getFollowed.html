@@ -1,0 +1,13 @@
+<nav class="followedSel"> 
+    <ul class="followedMenu">
+        <li class="list-option" onclick="clearParams();albumSearch()">Albums</li>
+        <li class="list-option" onclick="clearParams();artistSearch();">Artists</li>
+        <li class="list-option" onclick="clearParams();playlistSearch();">Playlists</li>
+    </ul>
+</nav>
+<div id="loadingSpinner" class="custom-spinner" style="display: none;">
+    <img src="../extra/XOsX.gif" alt="Loading..." />
+  </div>  
+  <div id="followed-container">
+    <ul id="followedList"></ul>
+  </div>

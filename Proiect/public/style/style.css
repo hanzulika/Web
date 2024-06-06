@@ -1,0 +1,351 @@
+/* Google Fonts Import Link */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body{
+    padding-top:70px;
+}
+
+#navbar{
+  position: fixed;
+  top:0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #c1f7f5;
+}
+.nav-links{
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 20px 15px;
+  border-radius: 12px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+.nav-links li{
+  list-style: none;
+  margin: 0 12px;
+}
+.nav-links li a{
+  position: relative;
+  color: #333;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 6px 0;
+  text-decoration: none;
+}
+.nav-links li a:before{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: #34efdf;
+  border-radius: 12px;
+  transition: all 0.4s ease;
+}
+.nav-links li a:hover:before{
+  width: 100%;
+}
+.nav-links li.center a:before{
+  left: 50%;
+  transform: translateX(-50%);
+}
+.nav-links li.upward a:before{
+  width: 100%;
+  bottom: -5px;
+  opacity: 0;
+}
+.nav-links li.upward a:hover:before{
+  bottom: 0px;
+  opacity: 1;
+}
+.nav-links li.forward a:before{
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s ease;
+}
+.nav-links li.forward a:hover:before{
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+#guess-button {
+    background: #fff;
+    padding: 20px 15px;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    text-decoration: none;
+    color: inherit;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+
+  #guess-button:hover {
+    background-color: #b9e7f7;
+  }
+
+  #container{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+#guess-container{
+  position:relative;
+  display: flex;
+  flex-direction: column; /* Add this line */
+}
+
+#tries{
+  position: absolute;
+  left:-150px;
+  top:300px;
+  order:-1;
+}
+
+  #guess-box{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 500px;
+    height: 500px; /* adjust as needed */
+    margin: 20px 0; /* adjust as needed */
+    background-color: #ffffff; /* adjust as needed */
+    border-radius: 12px; /* adjust as needed */
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2); /* adjust as needed */
+  }
+
+  #small-box-container{
+    display:flex;
+    justify-content: space-between;
+  }
+
+  #small-box-container p{
+    order:2;
+  }
+
+  .small-box {
+    order:3;
+    width:100px; /* adjust as needed */
+    height: 50px; /* adjust as needed */
+    margin: 10px; /* adjust as needed */
+    background-color: #f8f9fa; /* adjust as needed */
+  }
+  
+  #big-box {
+    order:1;
+    flex-grow: 1; /* this will make the box take up the rest of the space in the #guess-box */
+    background-color: #f8f9fa; /* adjust as needed */
+  }
+  
+  #big-box img {
+    width: 100%; /* full width of the #big-box */
+    height: 500px; /* fixed height */
+    object-fit: cover; 
+  }
+
+  #data-list {
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+#dropdown {
+  background-color: #fff;
+  max-height: 100px; /* Adjust as needed */
+  overflow-y: auto;
+  z-index: 1;
+  position: relative;
+  display: none;
+}
+
+#new-albums,#best-playlists{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  align-items: stretch;
+  grid-auto-flow: dense;
+}
+
+button {
+  padding: 10px 20px; /* Add more padding */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #007BFF; /* A pleasant blue */
+  color: #FFFFFF; /* White text */
+  font-size: 16px; /* Larger text */
+  cursor: pointer; /* Cursor indicates clickable item */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+button:hover {
+  background-color: #0056b3; /* Darker shade of blue on hover */
+}
+
+.album-link {
+  text-decoration: none; /* Remove underline */
+  color: #FFFFFF; /* White text */
+  background-color: #007BFF; /* A pleasant blue */
+  padding: 10px 20px; /* Add padding */
+  border-radius: 5px; /* Rounded corners */
+  display: inline-block; /* Necessary for padding and border-radius */
+  font-size: 16px; /* Larger text */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.album-link:hover {
+  background-color: #0056b3; /* Darker shade of blue on hover */
+}
+
+.followedMenu {
+  list-style-type: none; /* Remove default list styling */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  overflow: hidden; /* Clear floats */
+  background-color: #333; /* Dark background for the navbar */
+  display: flex; /* Display list items in a row */
+  justify-content: space-around; /* Distribute space around items */
+}
+
+.list-option {
+  float: left; /* Float list items to the left */
+  display: block; /* Change display to block for styling */
+  color: white; /* Text color */
+  text-align: center; /* Center text */
+  padding: 14px 16px; /* Padding for spacing */
+  text-decoration: none; /* Remove underline from links */
+  cursor: pointer; /* Change cursor to pointer to indicate clickable items */
+}
+
+.list-option:hover {
+  background-color: #ddd; /* Light background on hover */
+  color: black; /* Text color change on hover */
+}
+
+#followed-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  align-items: stretch;
+  grid-auto-flow: dense;
+}
+
+/* General styling for the container elements */
+#name, #followers, #product, #type, #email, #country, #pfpimg {
+  margin-bottom: 20px; /* Adds space between each element */
+  padding: 10px; /* Adds padding inside the elements */
+  background-color: #f0f0f0; /* Light grey background for visibility */
+  border-radius: 5px; /* Rounded corners */
+}
+
+/* Styling for the text inside #followers to make it stand out */
+#followers p {
+  color: #333; /* Darker text color for contrast */
+  font-weight: bold; /* Makes text bold */
+}
+
+/* Enhance the appearance of the lists for top artists and tracks */
+#topartists, #toptracks {
+  list-style-type: none; /* Removes default list styling */
+  padding-left: 0; /* Removes default padding */
+  margin-bottom: 20px; /* Adds space below the list */
+}
+
+#topartists li, #toptracks li {
+  background-color: #e9ecef; /* Light background color for list items */
+  margin-bottom: 5px; /* Adds space between list items */
+  padding: 10px; /* Adds padding inside list items */
+  border-radius: 5px; /* Rounded corners for list items */
+}
+
+/* Styling for the device section */
+#deviceSection {
+  margin-top: 20px; /* Adds space above the device section */
+  background-color: #f8f9fa; /* Very light background color */
+  padding: 20px; /* Adds padding inside the device section */
+  border-radius: 5px; /* Rounded corners */
+}
+
+#deviceSection .form-label {
+  font-weight: bold; /* Makes label text bold */
+}
+
+#devices {
+  margin-bottom: 10px; /* Adds space below the select */
+}
+
+input[type="button"] {
+  background-color: #007bff; /* Bootstrap primary button color */
+  color: white; /* Text color */
+  border: none; /* Removes border */
+  padding: 10px 20px; /* Padding inside the button */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Changes cursor to pointer on hover */
+}
+
+input[type="button"]:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Existing CSS here */
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  #navbar {
+    width: auto;
+  }
+
+  .nav-links {
+    flex-direction: row;
+    padding: 10px;
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+  }
+
+  #guess-button {
+    margin-top: 10px;
+  }
+
+  #guess-box {
+    width: 80%; /* adjust as needed */
+    margin: 0 auto;
+    display:block;
+    height: auto; /* adjust as needed */
+  }
+
+  #big-box img {
+    height: auto; /* adjust as needed */
+  }
+
+  #tries {
+    position: static;
+    order: 0;
+    margin-bottom: 20px;
+  }
+
+  #small-box-container {
+    flex-direction: row;
+  }
+
+  .small-box {
+    width: 100%; /* adjust as needed */
+    height: auto; /* adjust as needed */
+    margin: 10px 0; /* adjust as needed */
+  }
+}

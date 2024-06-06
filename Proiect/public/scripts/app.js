@@ -1,7 +1,8 @@
-var redirect_uri="https://spotify-guesser-1ab78.web.app/";
-//var redirect_uri="http://127.0.0.1:5500/public/index.html";
-var client_id ="91d81366c47b41f9ae1319609aebd3f0";
-var client_seccret ="5fe6af063fda42c3b0f85ca1132994cd";
+//var redirect_uri="https://spotify-guesser-1ab78.web.app/";
+//var redirect_uri="http://127.0.0.1:5500/public/html/account.html";
+var redirect_uri="http://spotter.kesug.com/";
+var client_id ="5ae62d85f9454d40ab8ee0440d4e23a9";
+var client_seccret ="4fa1211703a74149badc74d62404c6f1";
 
 const AUTHORIZE = "https://accounts.spotify.com/authorize";
 const TOKEN= "https://accounts.spotify.com/api/token";
@@ -19,7 +20,7 @@ function onLoad(){
 }
 
 function addNavbar(){
-    fetch('./extra/navbar.html')
+    fetch('../extra/navbar.html')
     .then(response => response.text())
     .then(data => {
         document.getElementById('navbar').innerHTML = data;
@@ -118,19 +119,24 @@ function showImage(src, id){
 
 function callApi(method, url, body, callback) {
     let xhr = new XMLHttpRequest();
-  
+
     xhr.open(method, url, true);
-    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token); // Set the access token here
+    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token); 
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        callback(JSON.parse(xhr.responseText)); // Pass the response data to the callback
-      } else if (xhr.readyState === 4) {
-        console.error(xhr.responseText);
-      }
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            callback(JSON.parse(xhr.responseText));
+        } else if (xhr.readyState === 4) {
+            console.error(xhr.responseText);
+            if (xhr.status === 429) { 
+                setTimeout(function() {
+                    location.reload();
+                }, 4000); 
+            }
+        }
     };
     xhr.send(JSON.stringify(body));
-  }
+}
 
 function removeAllItems(elementId) {
     let node = document.getElementById(elementId);

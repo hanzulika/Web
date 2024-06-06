@@ -9,7 +9,7 @@ function onPageLoad() {
 }
 
 function loadProfilePage() {
-    fetch('./extra/guesser.html')
+    fetch('../extra/guesser.html')
         .then(response => response.text())
         .then(data => {
             document.getElementById('container').innerHTML = data;
@@ -25,7 +25,7 @@ function loadProfilePage() {
 
 function loadArtists() {
     // Call the API to get the followed artists
-    callApi('GET', FOLLOWED_ARTISTS, null, function(response) {
+    callApi('GET', FOLLOWED_ARTISTS, null, function (response) {
         // Handle the artist response
         handleArtistResponse(response);
         // After the artists have been loaded, get a random artist
@@ -46,7 +46,7 @@ function handleArtistResponse(data) {
                 let genre = item.genres[0].toLowerCase();
                 if (genre.includes('indie')) {
                     genre = 'indie';
-                } else if (genre.includes('metal')|| genre.includes('death') || genre.includes('black') || genre.includes('thrash') || genre.includes('doom') || genre.includes('power') || genre.includes('progressive') || genre.includes('symphonic') || genre.includes('folk') || genre.includes('viking') || genre.includes('gothic') || genre.includes('nu') || genre.includes('grindcore') || genre.includes('hardcore') || genre.includes('metalcore') || genre.includes('post') || genre.includes('sludge') || genre.includes('stoner') || genre.includes('glam') || genre.includes('hair') || genre.includes('speed') || genre.includes('thrash')){
+                } else if (genre.includes('metal') || genre.includes('death') || genre.includes('black') || genre.includes('thrash') || genre.includes('doom') || genre.includes('power') || genre.includes('progressive') || genre.includes('symphonic') || genre.includes('folk') || genre.includes('viking') || genre.includes('gothic') || genre.includes('nu') || genre.includes('grindcore') || genre.includes('hardcore') || genre.includes('metalcore') || genre.includes('post') || genre.includes('sludge') || genre.includes('stoner') || genre.includes('glam') || genre.includes('hair') || genre.includes('speed') || genre.includes('thrash')) {
                     genre = 'metal';
                 } else if (genre.includes('rock') || genre.includes('punk')) {
                     genre = 'rock';
@@ -55,7 +55,7 @@ function handleArtistResponse(data) {
                 } else if (genre.includes('rap') || genre.includes('hip hop')) {
                     genre = 'rap';
                 }
-                
+
                 let artist = {
                     name: item.name,
                     genre: genre,
@@ -159,7 +159,7 @@ function addEventListeners(inputFieldId, dropdownId, artists) {
     var inputField = document.getElementById(inputFieldId);
     var dropdown = document.getElementById(dropdownId);
 
-    inputField.addEventListener('input', function() {
+    inputField.addEventListener('input', function () {
         dropdown.innerHTML = '';
         var inputText = inputField.value;
 
@@ -174,14 +174,14 @@ function addEventListeners(inputFieldId, dropdownId, artists) {
         matchingArtists.slice(0, 4).forEach(artist => {
             var option = document.createElement('div');
             option.textContent = artist.name;
-            option.addEventListener('mouseover', function() {
+            option.addEventListener('mouseover', function () {
                 option.style.backgroundColor = '#ccc';
                 option.style.cursor = 'pointer';
             });
-            option.addEventListener('mouseout', function() {
+            option.addEventListener('mouseout', function () {
                 option.style.backgroundColor = ''; // Reset the background color
             });
-            option.addEventListener('click', function() {
+            option.addEventListener('click', function () {
                 inputField.value = artist.name; // Set the input field value to the artist name
                 dropdown.style.display = 'none'; // Hide the dropdown
             });
@@ -191,7 +191,7 @@ function addEventListeners(inputFieldId, dropdownId, artists) {
         dropdown.style.display = 'block';
     });
 
-    inputField.addEventListener('change', function() {
+    inputField.addEventListener('change', function () {
         var options = Array.from(dropdown.children).map(option => option.textContent);
         if (!options.includes(inputField.value)) {
             inputField.value = '';
@@ -212,6 +212,11 @@ let counter = 1;
 
 function guessArtist() {
     var inputField = document.getElementById('guess-input');
+    if (inputField.value.trim() === '') {
+        alert('Please enter an artist name');
+        return;
+    }
+
     var guessedArtistName = inputField.value;
 
     var artist = artists.find(artist => artist.name.toLowerCase() === guessedArtistName.toLowerCase());
@@ -220,17 +225,17 @@ function guessArtist() {
         var genreBox = document.getElementById('genre');
         var popularityBox = document.getElementById('popularity');
         var firstAlbumBox = document.getElementById('firstAlbum');
-    
+        var relatedArtistBox = document.getElementById('relatedArtist');
+        var bigBoxImage = document.querySelector('#big-box img');
+
         genreBox.innerHTML = artist.genre;
         popularityBox.innerHTML = artist.popularity;
         firstAlbumBox.innerHTML = artist.firstAlbum;
-        document.getElementById('relatedArtist').innerHTML = artist.related;
-    
-        var bigBoxImage = document.querySelector('#big-box img');
+        relatedArtistBox.innerHTML = artist.related;
         if (bigBoxImage) {
             bigBoxImage.src = artist.image.url;
         }
-    
+
         // Compare genres
         if (artist.genre === randomArtist.genre) {
             genreBox.style.backgroundColor = 'green';
@@ -267,7 +272,7 @@ function guessArtist() {
         } else if (artist.firstAlbum < randomArtist.firstAlbum) {
             firstAlbumBox.innerHTML += ' ↑';
         }
-    
+
         if (artist.name === randomArtist.name &&
             artist.genre === randomArtist.genre &&
             artist.popularity === randomArtist.popularity &&
@@ -275,8 +280,9 @@ function guessArtist() {
             artist.related === randomArtist.related &&
             artist.image.url === randomArtist.image.url) {
             alert('You guessed the artist');
+            endGame(true);
         }
-    
+
     } else {
         alert('Artist not found');
     }
@@ -286,8 +292,79 @@ function guessArtist() {
         counter++;
     } else {
         alert('You have reached the maximum number of tries');
-        counter=1;
-        getRandomArtist();
-        updateTries(0);
+        alert('The artist was....')
+        endGame(false);
+        displayRandomArtist(randomArtist);
     }
+}
+
+function endGame(correctGuess) {
+    console.log('endGame called');
+    var inputField = document.getElementById('guess-input');
+    var guessButton = document.getElementById('guess-button');
+
+    inputField.disabled = true; // Disable the input field
+    // Use setTimeout to ensure the DOM updates are reflected.
+    setTimeout(() => {
+        guessButton.innerText = 'Play again'; // Change button text to "Play again"
+    }, 0);
+
+    guessButton.onclick = function () {
+        resetGame();
+    };
+}
+
+function resetGame() {
+    var inputField = document.getElementById('guess-input');
+    var guessButton = document.getElementById('guess-button');
+    var genreBox = document.getElementById('genre');
+    var popularityBox = document.getElementById('popularity');
+    var firstAlbumBox = document.getElementById('firstAlbum');
+    var relatedArtistBox = document.getElementById('relatedArtist');
+    var bigBoxImage = document.querySelector('#big-box img');
+
+    if (bigBoxImage) {
+        bigBoxImage.src = "../extra/guess-image.png";
+    }
+
+    genreBox.innerHTML = '';
+    popularityBox.innerHTML = '';
+    firstAlbumBox.innerHTML = '';
+    relatedArtistBox.innerHTML = '';
+    genreBox.style.backgroundColor = 'white';
+    popularityBox.style.backgroundColor = 'white';
+    firstAlbumBox.style.backgroundColor = 'white';
+
+    inputField.disabled = false; // Enable the input field
+    inputField.value = ''; // Clear the input field
+    guessButton.innerText = 'Guess'; // Reset button text to "Guess"
+    counter = 1; // Reset counter
+    getRandomArtist(); // Fetch a new random artist
+    updateTries(0); // Reset tries display
+
+    // Rebind the guessButton's onclick event to the guessArtist function
+    guessButton.onclick = guessArtist;
+}
+
+function displayRandomArtist(artist) {
+    var inputField = document.getElementById('guess-input'); // Get the input field
+    var genreBox = document.getElementById('genre');
+    var popularityBox = document.getElementById('popularity');
+    var firstAlbumBox = document.getElementById('firstAlbum');
+    var relatedArtistBox = document.getElementById('relatedArtist');
+    var bigBoxImage = document.querySelector('#big-box img');
+    if (bigBoxImage) {
+        bigBoxImage.src = artist.image.url;
+    }
+
+    genreBox.style.backgroundColor = 'green';
+    popularityBox.style.backgroundColor = 'green';
+    firstAlbumBox.style.backgroundColor = 'green';
+    genreBox.innerHTML = artist.genre;
+    popularityBox.innerHTML = artist.popularity;
+    firstAlbumBox.innerHTML = artist.firstAlbum;
+    relatedArtistBox.innerHTML = artist.related;
+
+    // Set the input field's value to the artist's name
+    inputField.value = artist.name;
 }

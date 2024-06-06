@@ -51,7 +51,7 @@ app.get("/posts", (req, res) => {
 });
 
 app.get("/posts/:id", (req, res) => { 
-    connection.query('SELECT * FROM posts WHERE id = ?', [req.params.id], (error, results) => { 
+    connection.query('SELECT * FROM posts WHERE id = ?', [req.params.id],(error, results) => { 
         if (error) { 
             res.status(500).send(error); 
         } else if (results.length === 0) { 
